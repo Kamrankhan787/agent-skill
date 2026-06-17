@@ -63,6 +63,35 @@ def analyze_weather(location: str) -> str:
 # FastMCP exposes a Starlette ASGI app via .sse_app()
 app = mcp.sse_app()
 
+from starlette.responses import HTMLResponse
+def homepage(request):
+    html_content = """
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <title>MCP Server Running</title>
+        <style>
+            body { font-family: system-ui, -apple-system, sans-serif; background: #0a0a0a; color: #ededed; display: flex; align-items: center; justify-content: center; height: 100vh; margin: 0; }
+            .container { text-align: center; background: #1a1a1a; padding: 3rem; border-radius: 12px; border: 1px solid #333; box-shadow: 0 8px 32px rgba(0,0,0,0.5); }
+            h1 { color: #fff; margin-top: 0; }
+            p { color: #a0a0a0; font-size: 1.1rem; }
+            .code { background: #000; padding: 10px 15px; border-radius: 6px; font-family: monospace; color: #4ade80; font-size: 1.2rem; margin-top: 1rem; display: inline-block; border: 1px solid #222; }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <h1>🚀 MCP Server is Live</h1>
+            <p>This is a Model Context Protocol (MCP) server designed for AI agents.<br>There is no frontend web application here.</p>
+            <p>Connect your AI client to the SSE endpoint:</p>
+            <div class="code">/sse</div>
+        </div>
+    </body>
+    </html>
+    """
+    return HTMLResponse(html_content)
+
+app.add_route("/", homepage)
+
 if __name__ == "__main__":
     # Start the server using stdio transport
     # Note: FastMCP handles the stdio transport setup automatically.
