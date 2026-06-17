@@ -60,14 +60,8 @@ def analyze_weather(location: str) -> str:
     return f"Please analyze the weather for {location} and tell me what I should pack for a weekend trip."
 
 # Vercel needs an ASGI 'app' to serve HTTP requests (which enables SSE transport for MCP)
-# We export it here. FastMCP usually exposes this via http_app() or get_asgi_app()
-try:
-    if hasattr(mcp, "http_app"):
-        app = mcp.http_app()
-    elif hasattr(mcp, "get_asgi_app"):
-        app = mcp.get_asgi_app()
-except Exception as e:
-    print(f"Warning: Could not export ASGI app for Vercel: {e}", file=sys.stderr)
+# FastMCP exposes a Starlette ASGI app via .sse_app()
+app = mcp.sse_app()
 
 if __name__ == "__main__":
     # Start the server using stdio transport
